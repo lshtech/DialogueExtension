@@ -14,6 +14,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SDV.Shared\SDV.Shared.projitems*{1ed451f5-8003-4aea-bce6-d538b0108d3b}*SharedItemsImports = 5
+		SDV.Shared\SDV.Shared.projitems*{cda8795c-2490-4c42-90fb-9ab95fae1d26}*SharedItemsImports = 5
 		SDV.Shared\SDV.Shared.projitems*{dddc1645-0d3a-4044-8c7d-2b3d37834daa}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,6 +9,26 @@
     <Import_RootNamespace>SDV.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\AnimatedSpriteWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\AnimationFrameWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\CharacterWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\FarmerSpriteWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\GameLocationWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\GameWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\HorseWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IAnimatedSpriteWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IAnimationFrameWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\ICharacterWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IFarmerSpriteWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IGameLocationWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IGameWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IHorseWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IModDataDictionaryWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\INPCWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IWrappedType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\ModDataDictionaryWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\NPCWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\StaticGameWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Numerics.Hasing\HashHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.ValueTuple\System\Runtime\CompilerServices\TupleElementNamesAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.ValueTuple\System\ValueTuple\TupleExtensions.cs" />

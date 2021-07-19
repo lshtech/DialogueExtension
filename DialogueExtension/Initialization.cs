@@ -3,7 +3,6 @@ using DialogueExtension.Patches;
 using DialogueExtension.Patches.Parsing;
 using DialogueExtension.Patches.Utility;
 using DialogueExtension.Utilities;
-using Harmony;
 using LightInject;
 using StardewModdingAPI;
 
@@ -17,7 +16,7 @@ namespace DialogueExtension
       container.RegisterAssembly(GetType().Assembly);
       container.RegisterInstance(mod.Helper);
       container.RegisterInstance(mod.Monitor);
-      container.Register<HarmonyInstance>();
+      container.Register<IHarmonyWrapper, HarmonyWrapper>();
       container.Decorate<IMonitor, Logger>();
       container.Register<IConditionRepository, ConditionRepository>(new PerContainerLifetime());
       container.Register<IDialogueLogic, DialogueLogic>();

@@ -45,12 +45,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DialogueExtension\DialogueExtension.csproj">
-      <Project>{1ed451f5-8003-4aea-bce6-d538b0108d3b}</Project>
-      <Name>DialogueExtension</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,20 +4,14 @@ using StardewValley;
 
 namespace DialogueExtension.Patches.Utility
 {
-  public interface IConditionRepository
+  public class ConditionRepositoryBase
   {
-    IDictionary<(int hearts, bool andHigher),
-      IList<Func<DialogueConditions, int, Dialogue>>> HeartDialogueDictionary { get; set; }
-  }
-
-  public class ConditionRepository : IConditionRepository
-  {
-    public IDictionary<(int hearts, bool andHigher), IList<Func<DialogueConditions, int, Dialogue>>> 
-      HeartDialogueDictionary { get; set; }
-
-    public ConditionRepository()
+    public ConditionRepositoryBase()
     {
       HeartDialogueDictionary = new Dictionary<(int hearts, bool andHigher), IList<Func<DialogueConditions, int, Dialogue>>>();
     }
+
+    public IDictionary<(int hearts, bool andHigher), IList<Func<DialogueConditions, int, Dialogue>>> 
+      HeartDialogueDictionary { get; set; }
   }
 }

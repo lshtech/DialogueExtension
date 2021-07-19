@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DependencyHandler\**" />
+    <Compile Remove="Mocks\**" />
+    <EmbeddedResource Remove="DependencyHandler\**" />
+    <EmbeddedResource Remove="Mocks\**" />
+    <None Remove="DependencyHandler\**" />
+    <None Remove="Mocks\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="NUnit" Version="3.13.2" />
   </ItemGroup>
@@ -13,9 +22,6 @@
     <ProjectReference Include="..\DialogueExtension\DialogueExtension.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DependencyHandler\" />
-    <Folder Include="Mocks\" />
-  </ItemGroup>
+  <Import Project="..\SDV.Shared\SDV.Shared.projitems" Label="Shared" />
 
 </Project>

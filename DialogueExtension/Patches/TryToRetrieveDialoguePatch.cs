@@ -1,15 +1,19 @@
 ﻿using DialogueExtension.Patches.Parsing;
+using DialogueExtension.Patches.Utility;
 using Harmony;
+using JetBrains.Annotations;
 using StardewModdingAPI;
 using StardewValley;
+// ReSharper disable InconsistentNaming
+// ReSharper disable RedundantAssignment
 
 namespace DialogueExtension.Patches
 {
   public class TryToRetrieveDialoguePatch : HarmonyPatch
   {
-    public TryToRetrieveDialoguePatch(IMonitor monitor, IDialogueLogic dialogueLogic) : base(monitor)
+    public TryToRetrieveDialoguePatch(IMonitor monitor, IHarmonyWrapper wrapper, IDialogueLogic dialogueLogic) : base(monitor, wrapper)
     {
-      HarmonyInstance.Patch(
+      HarmonyWrapper.Patch(
        AccessTools.Method(typeof(NPC), "tryToRetrieveDialogue"),
        new HarmonyMethod(typeof(TryToRetrieveDialoguePatch), "Prefix"),
        new HarmonyMethod(typeof(TryToRetrieveDialoguePatch), "Postfix"));
@@ -20,9 +24,7 @@ namespace DialogueExtension.Patches
     protected override string PatchName => ".tryToRetrieveDialogue";
     private static IDialogueLogic _dialogueLogic;
 
-    
-
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly]
     private static bool Prefix(ref NPC __instance, ref string preface, ref Dialogue __result)
     {
       __result = _dialogueLogic.GetDialogue(ref __instance, !string.IsNullOrEmpty(preface));
@@ -31,8 +33,8 @@ namespace DialogueExtension.Patches
       return true;
     }
 
-   
-    // ReSharper disable once UnusedMember.Local
+
+    [UsedImplicitly]
     private static void Postfix(ref NPC __instance, ref Dialogue __result)
     {
       if (__result == null) Logger.Log("Value is null", LogLevel.Alert);

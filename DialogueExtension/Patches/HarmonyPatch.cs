@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using DialogueExtension.Patches.Utility;
 using StardewModdingAPI;
 
 namespace DialogueExtension.Patches
@@ -8,11 +8,12 @@ namespace DialogueExtension.Patches
     protected static IMonitor Logger;
     private readonly string _baseId = "elbe.DialogueExtension";
 
-    protected HarmonyInstance HarmonyInstance;
+    protected IHarmonyWrapper HarmonyWrapper;
 
-    protected HarmonyPatch(IMonitor logger)
+    protected HarmonyPatch(IMonitor logger, IHarmonyWrapper harmonyWrapper)
     {
-      HarmonyInstance = HarmonyInstance.Create(_baseId + PatchName);
+      HarmonyWrapper = harmonyWrapper;
+      HarmonyWrapper.Create(_baseId + PatchName);
       Logger = logger;
     }
 
