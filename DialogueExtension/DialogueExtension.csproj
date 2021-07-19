@@ -3,12 +3,16 @@
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <EnableHarmony>true</EnableHarmony>
-    <GamePath>m:\</GamePath>
-    <EnableModDeploy>false</EnableModDeploy>
+    <GamePath>v:\</GamePath>
+    <EnableModDeploy>true</EnableModDeploy>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ILMerge.Fody" Version="1.16.0" />
+    <PackageReference Include="LightInject" Version="6.4.0" />
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
   </ItemGroup>
+
+  <Import Project="..\SDV.Shared\SDV.Shared.projitems" Label="Shared" />
 
 </Project>

@@ -13,4 +13,9 @@
     <ProjectReference Include="..\DialogueExtension\DialogueExtension.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DependencyHandler\" />
+    <Folder Include="Mocks\" />
+  </ItemGroup>
+
 </Project>

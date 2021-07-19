@@ -1,5 +1,4 @@
-﻿using System;
-using StardewModdingAPI;
+﻿using StardewModdingAPI;
 
 namespace DialogueExtension
 {
@@ -7,7 +6,7 @@ namespace DialogueExtension
   {
     public override void Entry(IModHelper helper)
     {
-      throw new NotImplementedException();
+      _ = new Initialization(this);
     }
   }
 }

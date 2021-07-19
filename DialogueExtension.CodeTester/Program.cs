@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace DialogueExtension.CodeTester
 {
@@ -6,55 +8,65 @@ namespace DialogueExtension.CodeTester
   {
     static void Main(string[] args)
     {
-      DependencyHandlerChecks();
+      //var x new Initialization();
+      //_ = new TestClass("Inherited Class");
+
+      for (var i = 1; i <= 200; i++)
+      {
+        var twoDigit = i.ToString("00");
+        Console.WriteLine($"{twoDigit} | {int.Parse(twoDigit)}");
+      }
       Console.ReadLine();
     }
 
-    private static void DependencyHandlerChecks()
-    {
-      var handler = new Dependencies.DependencyHandler();
-      handler.RegisterType<ITest, Test>("Type");
-      handler.RegisterInstance<ITest, Test>(new Test(), "Instance");
 
-      var test = handler.Resolve<ITest>("Type");
-      Console.WriteLine("--- Type ---");
-      Console.WriteLine($"{test.Name} | {test.Number}");
-      test.Name = "Altered for Types";
-      test.Number = 32;
-      Console.WriteLine($"{test.Name} | {test.Number}");
-      Console.WriteLine();
-      test = handler.Resolve<ITest>("Instance");
-      Console.WriteLine("--- Instance ---");
-      Console.WriteLine($"{test.Name} | {test.Number}");
-      test.Name = "Altered for Instances";
-      test.Number = 98;
-      Console.WriteLine($"{test.Name} | {test.Number}");
-      Console.WriteLine();
-      test = handler.Resolve<ITest>("Type");
-      Console.WriteLine("--- Type 2 ---");
-      Console.WriteLine($"{test.Name} | {test.Number}");
-      Console.WriteLine();
-      test = handler.Resolve<ITest>("Instance");
-      Console.WriteLine("--- Instance 2 ---");
-      Console.WriteLine($"{test.Name} | {test.Number}");
-      Console.WriteLine();
+    private static bool? Test(int a, int b)
+    {
+      Console.WriteLine($"values: {a} | {b}");
+      if (a > b) return true;
+      return null;
+    }
+  }
+
+  public class Api : IApi
+  {
+    //public Func<string, bool> CheckHeartLevel { get; set; }
+    Random rand = new Random();
+    public Api()
+    {
+      
+      //CheckHeartLevel = s => int.Parse(s) >= rand.Next(0, 10);
     }
 
-    public interface ITest
-    {
-      string Name { get; set; }
-      int Number { get; set; }
-    }
+    public Func<string, bool> CheckHeartLevel() => s => int.Parse(s) >= rand.Next(0, 10);
+  }
 
-    public class Test : ITest
+  public delegate void UpdateStatusEventHandler(int index);
+  public delegate void StartedEventHandler(int time);
+
+
+  public interface IApi
+  {
+    Func<string, bool> CheckHeartLevel();
+  }
+
+  public class Worker 
+  {
+    public Worker()
     {
-      public Test()
+      var funcs = new List<Func<string, bool>>();
+      for (var i = 0; i < 10; i++)
       {
-        Name = "Original";
-        Number = 66;
+        IApi x = new Api();
+        Thread.Sleep(1000);
+        Console.WriteLine(x.CheckHeartLevel().Invoke(i.ToString()));
       }
-      public string Name { get; set; }
-      public int Number { get; set; }
+
+      foreach (var func in funcs)
+      {
+        
+      }
     }
   }
 }
+//Console.WriteLine(apis[0].CheckHeartLevel(i.ToString()));
