@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
 
 namespace SDV.Shared.Abstractions
 {
-  public interface IGameWrapper
+  public interface IGameWrapper : IWrappedType<Game1>
   {
     bool CanTakeScreenshots();
     bool CanBrowseScreenshots();

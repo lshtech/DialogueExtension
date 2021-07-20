@@ -1,11 +1,11 @@
 ﻿using System;
-using StardewValley;
+using SDV.Shared.Abstractions;
 
 namespace DialogueExtension.Patches.Parsing
 {
   public interface IDialogueLogic
   {
-    Dialogue GetDialogue(ref NPC npc, bool useSeason);
-    bool CheckIfDialogueContainsKey(NPC npc, string key, out Dialogue dialogue, Func<bool> extraConditions = null);
+    IDialogueWrapper GetDialogue(ref INPCWrapper npc, bool useSeason);
+    bool CheckIfDialogueContainsKey(INPCWrapper npc, string key, out IDialogueWrapper dialogue, Func<bool> extraConditions = null);
   }
 }

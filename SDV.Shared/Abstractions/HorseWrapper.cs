@@ -5,9 +5,10 @@ using Object = StardewValley.Object;
 
 namespace SDV.Shared.Abstractions
 {
-  public class HorseWrapper : NPCWrapper, IHorseWrapper, IWrappedType<Horse>
+  public class HorseWrapper : NPCWrapper, IHorseWrapper
   {
-    public HorseWrapper(Character character) : base(character)
+
+    public HorseWrapper(Horse character) : base(character)
     {
     }
 
@@ -38,6 +39,6 @@ namespace SDV.Shared.Abstractions
     {
     }
 
-    public Horse GetBaseType { get; }
+    public new Horse GetBaseType { get; }
   }
 }

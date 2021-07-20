@@ -1,6 +1,5 @@
 ﻿using DialogueExtension.Api;
 using DialogueExtension.Patches;
-using DialogueExtension.Patches.Parsing;
 using DialogueExtension.Patches.Utility;
 using DialogueExtension.Utilities;
 using LightInject;
@@ -18,12 +17,7 @@ namespace DialogueExtension
       container.RegisterInstance(mod.Monitor);
       container.Register<IHarmonyWrapper, HarmonyWrapper>();
       container.Decorate<IMonitor, Logger>();
-      container.Register<IConditionRepository, ConditionRepository>(new PerContainerLifetime());
-      container.Register<IDialogueLogic, DialogueLogic>();
-      container.Register<IDialogueParser, VanillaDialogueParser>();
-      container.Register<IHarmonyPatch, TryToRetrieveDialoguePatch>();
-      container.Register<IDialogueApi, DialogueApi>(new PerContainerLifetime());
-
+      
       container.GetInstance<IHarmonyPatch>();
       container.GetInstance<IDialogueApi>();
     }

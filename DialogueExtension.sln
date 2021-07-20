@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DialogueExtension.Tests", "
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SDV.Shared", "SDV.Shared\SDV.Shared.shproj", "{DDDC1645-0D3A-4044-8C7D-2B3D37834DAA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4854F4C3-A3A4-48C9-A214-7652E1363415}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SDV.Shared\SDV.Shared.projitems*{1ed451f5-8003-4aea-bce6-d538b0108d3b}*SharedItemsImports = 5

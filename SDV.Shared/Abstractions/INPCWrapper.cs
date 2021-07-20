@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SDV.Shared.Abstractions;
 using StardewValley;
 using StardewValley.Locations;
 
-namespace SDV
+namespace SDV.Shared.Abstractions
 {
-  public interface INPCWrapper : ICharacterWrapper
+  public interface INPCWrapper : ICharacterWrapper, IWrappedType<NPC>
   {
+    new NPC GetBaseType { get; }
     Dictionary<int, SchedulePathDescription> Schedule { get; set; }
     Dictionary<string, string> Dialogue { get; }
     SchedulePathDescription DirectionsToNewLocation { get; set; }

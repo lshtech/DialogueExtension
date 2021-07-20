@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SDV.Shared.Abstractions.Utility;
 using StardewValley;
 using StardewValley.Characters;
 
 namespace SDV.Shared.Abstractions
 {
-  public class GameWrapper : IGameWrapper, IWrappedType<Game1>
+  public class GameWrapper : DynamicStaticWrapper<Game1>, IGameWrapper
   {
+    public GameWrapper() : this(new Game1()) {}
     public GameWrapper(Game1 game) => GetBaseType = game;
 
     public bool CanTakeScreenshots() => GetBaseType.CanTakeScreenshots();

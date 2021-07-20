@@ -8,10 +8,7 @@ namespace DialogueExtension.Api
   public class DialogueApi : IDialogueApi
   {
     private readonly IConditionRepository _repository;
-    public DialogueApi(IConditionRepository repository)
-    {
-      _repository = repository;
-    }
+    public DialogueApi(IConditionRepository repository) => _repository = repository;
 
     public void AddCustomHeartLevelCondition(int heartLevel, bool levelAndHigher, Func<DialogueConditions, int, Dialogue> func)
     {

@@ -6,7 +6,7 @@ namespace DialogueExtension.Api
   {
     public void Compose(IServiceRegistry serviceRegistry)
     {
-      
+      serviceRegistry.Register<IDialogueApi, DialogueApi>(new PerContainerLifetime());
     }
   }
 }

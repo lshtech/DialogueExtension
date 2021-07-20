@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Threading;
+using LightInject;
 
 namespace DialogueExtension.CodeTester
 {
@@ -10,112 +7,102 @@ namespace DialogueExtension.CodeTester
   {
     static void Main(string[] args)
     {
-      //var x new Initialization();
-      //_ = new TestClass("Inherited Class");
-      var api = new Api();
-      var x = new DynamicProperties();
-      x.Add("blarg", api);
-      var y = x.Contains("blarg");
-      var z = x.Get<Api>("blarg");
-      var sf = api.Equals(z);
+      var c = CreateContainer();
+      var f = c.GetInstance<ITestFactory>();
+      //var t = f.CreateInstance<IWrappedTest, string>("test string");
+      var x = c.GetInstance(typeof(IWrappedTest), new[] {"porky pigb"});
+
+      //var ff = c.GetInstance<IFooFactory>();
+      //var f = ff.GetFoo(324);
+      //var x = f;
+
       Console.ReadLine();
     }
 
-
-    private static bool? Test(int a, int b)
+    static ServiceContainer CreateContainer()
     {
-      Console.WriteLine($"values: {a} | {b}");
-      if (a > b) return true;
-      return null;
+      var container = new ServiceContainer();
+      container.Register<string, IWrappedTest>((factory, item) => new WrappedTest(item));
+      container.Register<ITestFactory, TestFactory>();
+
+      container.Register<int, IFoo>((factory, i) => new Foo(i));
+      container.Register<IFooFactory, FooFactory>();
+
+      return container;
     }
   }
 
-  public class Api : IApi
+  public class TestFactory : ITestFactory
   {
-    //public Func<string, bool> CheckHeartLevel { get; set; }
-    Random rand = new Random();
-    public Api()
+    public TWrapped CreateInstance<TWrapped, TBase>(TBase item)
+      where TBase : class
     {
-      
-      //CheckHeartLevel = s => int.Parse(s) >= rand.Next(0, 10);
+      var instance = Activator.CreateInstance(typeof(TWrapped), item);
+      return (TWrapped) instance;
     }
 
-    public Func<string, bool> CheckHeartLevel() => s => int.Parse(s) >= rand.Next(0, 10);
   }
-
-  public delegate void UpdateStatusEventHandler(int index);
-  public delegate void StartedEventHandler(int time);
-
-
-  public interface IApi
+  public interface ITestFactory
   {
-    Func<string, bool> CheckHeartLevel();
-  }
+    TWrapped CreateInstance<TWrapped, TBase>(TBase item)
+      where TBase : class;
 
-  public class Worker 
+
+    //ITest<T> Get
+  }
+  public abstract class Test<T> : ITest<T> where T : class
   {
-    public Worker()
-    {
-      var funcs = new List<Func<string, bool>>();
-      for (var i = 0; i < 10; i++)
-      {
-        IApi x = new Api();
-        Thread.Sleep(1000);
-        Console.WriteLine(x.CheckHeartLevel().Invoke(i.ToString()));
-      }
-
-      foreach (var func in funcs)
-      {
-        
-      }
-    }
+    protected T Item;
+   // protected Test(T item) => _item = item;
+    public string WhatAmI => Item.GetType().ToString();
   }
-
-  public class DynamicProperties : IDictionary
+  public interface ITest<T> where T : class
   {
-    private readonly IDictionary _propDict = new Hashtable();
-
-    public void Add<T>(string key, T value)
-    {
-      if (_propDict.Contains(key))
-        throw new ArgumentException("Key already exists");
-      _propDict.Add(key, value);
-    }
-
-    public T Get<T>(string key) => (T)_propDict[key];
-
-    public bool Contains(object key) => _propDict.Contains(key);
-
-    public void Add(object key, object value) => Add(key.ToString(), value);
-
-    public void Clear() => _propDict.Clear();
-
-    public IDictionaryEnumerator GetEnumerator() => _propDict.GetEnumerator();
-
-    public void Remove(object key)
-    {
-      _propDict.Remove(key);
-    }
-
-    public object this[object key]
-    {
-      get => _propDict[key];
-      set => _propDict[key] = value;
-    }
-
-    public ICollection Keys => _propDict.Keys;
-    public ICollection Values => _propDict.Values;
-    public bool IsReadOnly => _propDict.IsReadOnly;
-    public bool IsFixedSize => _propDict.IsFixedSize;
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-    public void CopyTo(Array array, int index) =>
-      _propDict.CopyTo(array, index);
-
-    public int Count => _propDict.Count;
-    public object SyncRoot => _propDict.SyncRoot;
-    public bool IsSynchronized => _propDict.IsSynchronized;
+    string WhatAmI { get; }
   }
+
+  public class WrappedTest : Test<string>, IWrappedTest
+  {
+
+    public WrappedTest(string item) => Item = item;
+  }
+
+  public interface IWrappedTest
+  {
+
+  }
+
+
+
+
+  public class Foo : IFoo
+  {
+    public Foo(int value)
+    {
+      Value = value;
+    }
+
+    public int Value { get; private set; }
+
+  
+  }
+
+  public interface IFooFactory
+  {
+    IFoo GetFoo(int value);
+  }
+  public class FooFactory : IFooFactory
+  {
+    private readonly Func<int, IFoo> _createFoo;
+
+    public FooFactory(Func<int, IFoo> createFoo) => _createFoo = createFoo;
+
+    public IFoo GetFoo(int value) => _createFoo(value);
+  }
+
+  public interface IFoo
+  {
+
+  }
+ 
 }
-//Console.WriteLine(apis[0].CheckHeartLevel(i.ToString()));

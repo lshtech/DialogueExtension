@@ -30,8 +30,8 @@ namespace DialogueExtension.Patches.Utility
             FluentDialogueBuilder.New(conditions).Season()
               .DayOfWeek().FirstOrSecondYear().Married().Build(null),
             out var dialogue)
-            ? new Dialogue(conditions.Npc.Dialogue["Fall_Mon"], conditions.Npc)
-            : dialogue;
+            ? new Dialogue(conditions.Npc.Dialogue["Fall_Mon"], conditions.BaseNpc)
+            : dialogue.GetBaseType;
 
         return null;
       });

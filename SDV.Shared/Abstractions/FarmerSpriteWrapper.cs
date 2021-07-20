@@ -3,9 +3,9 @@ using StardewValley;
 
 namespace SDV.Shared.Abstractions
 {
-  public class FarmerSpriteWrapper : AnimatedSpriteWrapper, IFarmerSpriteWrapper, IWrappedType<FarmerSprite>
+  public class FarmerSpriteWrapper : AnimatedSpriteWrapper, IFarmerSpriteWrapper
   {
-    public FarmerSpriteWrapper(AnimatedSprite animatedSprite) : base(animatedSprite)
+    public FarmerSpriteWrapper(FarmerSprite farmerSprite) : base(farmerSprite)
     {
     }
 
@@ -101,6 +101,6 @@ namespace SDV.Shared.Abstractions
     {
     }
 
-    public FarmerSprite GetBaseType { get; }
+    public new FarmerSprite GetBaseType { get; }
   }
 }

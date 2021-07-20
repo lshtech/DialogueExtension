@@ -9,10 +9,8 @@ namespace SDV.Shared.Abstractions
     bool PauseForSingleAnimation { get; set; }
     int CurrentSingleAnimation { get; }
     IAnimationFrameWrapper CurrentAnimationFrame { get; }
-    int CurrentFrame { get; set; }
     void setOwner(Farmer owner);
     void setCurrentAnimation(IAnimationFrameWrapper[] animation);
-    void faceDirection(int direction);
     bool IsPlayingBasicAnimation(int direction, bool carrying);
     void setCurrentSingleFrame(int which, short interval = 32000, bool secondaryArm = false, bool flip = false);
     void setCurrentFrame(int which);
@@ -72,9 +70,7 @@ namespace SDV.Shared.Abstractions
     int getWeaponTypeFromAnimation();
     bool isOnToolAnimation();
     bool isPassingOut();
-    void UpdateSourceRect();
     int frameOfCurrentSingleAnimation();
     void setCurrentSingleAnimation(int which);
-    void StopAnimation();
   }
 }

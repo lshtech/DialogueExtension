@@ -7,12 +7,19 @@
     <GameModsPath>$(GamePath)\DevMods</GameModsPath>
     <IgnoreModFilePatterns>JetBrains.Annotations.dll</IgnoreModFilePatterns>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ILMerge.Fody" Version="1.16.0" PrivateAssets="all" />
     <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" PrivateAssets="all" />
     <PackageReference Include="LightInject" Version="6.4.0" />
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
   <Import Project="..\SDV.Shared\SDV.Shared.projitems" Label="Shared" />

@@ -16,7 +16,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace SDV.Shared.Abstractions
 {
-  public interface IGameLocationWrapper
+  public interface IGameLocationWrapper : IWrappedType<GameLocation>
   {
     Map Map { get; set; }
     OverlaidDictionary Objects { get; }

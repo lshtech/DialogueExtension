@@ -27,10 +27,7 @@ namespace DialogueExtension.Patches.Utility
 
     private bool _setYear;
 
-    public FluentDialogueBuilder(DialogueConditions conditions)
-    {
-      _conditions = conditions;
-    }
+    private FluentDialogueBuilder(DialogueConditions conditions) => _conditions = conditions;
 
     private string Dialogue =>
       $"{GetSeason}" +

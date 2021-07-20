@@ -10,7 +10,7 @@ namespace SDV.Shared.Abstractions
   public class CharacterWrapper : ICharacterWrapper
   {
     public CharacterWrapper(Character character) => GetBaseType = character;
-    public Character GetBaseType { get; }
+    public virtual Character GetBaseType { get; }
     public IAnimatedSpriteWrapper Sprite { get; set; }
     public Vector2 Position { get; set; }
     public int FacingDirection { get; set; }

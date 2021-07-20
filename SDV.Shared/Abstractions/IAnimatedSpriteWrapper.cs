@@ -6,7 +6,7 @@ using StardewValley;
 
 namespace SDV.Shared.Abstractions
 {
-  public interface IAnimatedSpriteWrapper
+  public interface IAnimatedSpriteWrapper : IWrappedType<AnimatedSprite>
   {
     int CurrentFrame { get; set; }
     int SpriteWidth { get; set; }

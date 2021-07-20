@@ -1,11 +1,13 @@
 ﻿using System;
 using StardewValley;
+using StardewValley.Characters;
 using Object = StardewValley.Object;
 
 namespace SDV.Shared.Abstractions
 {
-  public interface IHorseWrapper : INPCWrapper
+  public interface IHorseWrapper : INPCWrapper, IWrappedType<Horse>
   {
+    new Horse GetBaseType { get; }
     Guid HorseId { get; set; }
     Farmer rider { get; set; }
     Farmer getOwner();

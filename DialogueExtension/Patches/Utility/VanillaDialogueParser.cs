@@ -1,12 +1,12 @@
 ﻿using System;
-using StardewValley;
+using SDV.Shared.Abstractions;
 
 namespace DialogueExtension.Patches.Utility
 {
   // ReSharper disable once UnusedMember.Global
   public class VanillaDialogueParser : IDialogueParser
   {
-    private NPC _npc;
+    private INPCWrapper _npc;
 
     /*
     "<Season>_" +
@@ -18,7 +18,7 @@ namespace DialogueExtension.Patches.Utility
 
     private string _workingString;
 
-    public VanillaDialogueParser(ref NPC npc, string dialogueKey)
+    public VanillaDialogueParser(ref INPCWrapper npc, string dialogueKey)
     {
       _workingString = dialogueKey;
       _npc = npc;
@@ -34,7 +34,7 @@ namespace DialogueExtension.Patches.Utility
       var friendship = GetFriendship(dayOfWeek);
 
       return new DialogueConditions(
-        ref _npc,
+        _npc,
         year,
         season,
         dayOfMonth,

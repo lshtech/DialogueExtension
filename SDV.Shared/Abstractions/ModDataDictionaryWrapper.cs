@@ -7,7 +7,7 @@ using StardewValley.Network;
 
 namespace SDV.Shared.Abstractions
 {
-  public class ModDataDictionaryWrapper : IModDataDictionaryWrapper, IWrappedType<ModDataDictionary>
+  public class ModDataDictionaryWrapper : IModDataDictionaryWrapper
   {
     public ModDataDictionaryWrapper(ModDataDictionary modDataDictionary) => GetBaseType = modDataDictionary;
     public uint DirtyTick { get; set; }

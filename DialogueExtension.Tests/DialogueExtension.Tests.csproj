@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
+    <EnableHarmony>false</EnableHarmony>
+    <GamePath>v:\</GamePath>
+    <EnableModDeploy>false</EnableModDeploy>
+    <EnableModZip>false</EnableModZip>
+    <EnableGameDebugging>false</EnableGameDebugging>
+    <GameModsPath>$(GamePath)\DevMods</GameModsPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>

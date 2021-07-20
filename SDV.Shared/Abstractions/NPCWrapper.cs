@@ -7,11 +7,9 @@ using StardewValley.Locations;
 
 namespace SDV.Shared.Abstractions
 {
-  public class NPCWrapper : CharacterWrapper, INPCWrapper, IWrappedType<NPC>
+  public class NPCWrapper : CharacterWrapper, INPCWrapper
   {
-    public NPCWrapper(Character character) : base(character)
-    {
-    }
+    public NPCWrapper(NPC npc) : base(npc){}
 
     public Dictionary<int, SchedulePathDescription> Schedule { get; set; }
     public Dictionary<string, string> Dialogue { get; }
@@ -415,6 +413,6 @@ namespace SDV.Shared.Abstractions
     {
     }
 
-    public NPC GetBaseType { get; }
+    public new NPC GetBaseType { get; }
   }
 }

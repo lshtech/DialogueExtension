@@ -1,8 +1,8 @@
 ﻿using System;
 using DialogueExtension.Patches.Utility;
 using SDV.Shared.Abstractions;
+using SDV.Shared.Abstractions.Utility;
 using StardewModdingAPI;
-using StardewValley;
 using DayOfWeek = DialogueExtension.Patches.Utility.DayOfWeek;
 
 namespace DialogueExtension.Patches.Parsing
@@ -11,40 +11,42 @@ namespace DialogueExtension.Patches.Parsing
   {
     private readonly IConditionRepository _conditionRepository;
     private IMonitor _logger;
-    private IGameWrapper _gameWrapper;
+    private dynamic _gameWrapper;
+    private IWrapperFactory _factory;
 
-    public DialogueLogic(IConditionRepository conditionRepository, IMonitor logger)
+    public DialogueLogic(IConditionRepository conditionRepository, IMonitor logger, IWrapperFactory factory)
     {
+      _factory = factory;
       _conditionRepository = conditionRepository;
       _logger = logger;
-      _gameWrapper = new GameWrapper(new Game1());
+      _gameWrapper = _factory.CreateInstance<IGameWrapper>();
     }
 
-    public Dialogue GetDialogue(ref NPC npc, bool useSeason)
+    public IDialogueWrapper GetDialogue(ref INPCWrapper npc, bool useSeason)
     {
-      //_logger.Log("Entering GetDialogue", LogLevel.Info);
-      foreach (var isMarried in new[] {true, false})
+      _logger.Log("Entering GetDialogue", LogLevel.Info);
+      foreach (var isMarried in new[] { true, false })
       {
-        //if (!Enum.TryParse<Season>(_gameWrapper.currentSeason, true, out var season)) continue;
-        //var conditions = new DialogueConditions(
-        //  ref npc,
-        //  _gameWrapper.year.ToString("00"),
-        //  useSeason ? season : Season.Unknown,
-        //  _gameWrapper.dayOfMonth,
-        //  ParseDayOfWeek(ref npc, _gameWrapper.shortDayNameFromDayOfSeason(_gameWrapper.dayOfMonth)),
-        //  isMarried ? MarriageAppend(_gameWrapper.player.spouse) : string.Empty,
-        //  _gameWrapper.player.friendshipData.TryGetValue(npc.Name, out var friendshipValue)
-        //    ? friendshipValue.Points
-        //    : 0);
+        if (!Enum.TryParse<Season>(_gameWrapper.currentSeason, true, out Season season)) continue;
+        var conditions = new DialogueConditions(
+          npc,
+          _gameWrapper.year.ToString("00"),
+          useSeason ? season : Season.Unknown,
+          _gameWrapper.dayOfMonth,
+          ParseDayOfWeek(npc, _gameWrapper.shortDayNameFromDayOfSeason(_gameWrapper.dayOfMonth)),
+          isMarried ? MarriageAppend(_gameWrapper.player.spouse) : string.Empty,
+          _gameWrapper.player.friendshipData.TryGetValue(npc.Name, out IFriendshipWrapper friendshipValue)
+            ? friendshipValue.Points
+            : 0);
 
-        //Dialogue dialogue;
-        //_logger.Log(
-        //  $"{conditions.Npc.Name} | {conditions.Year}|{conditions.Season}|{conditions.DayOfMonth}|{conditions.DayOfWeek}|{conditions.Friendship}",
-        //  LogLevel.Info);
-        //if (FirstPassDialogue(conditions, out dialogue)) return dialogue;
-        //if (HeartDialogue(conditions, out dialogue)) return dialogue;
-        //if (NullIfTruePass(conditions)) return null;
-        //if (LastPassDialogue(conditions, out dialogue)) return dialogue;
+        IDialogueWrapper dialogue;
+        _logger.Log(
+          $"{conditions.Npc.Name} | {conditions.Year}|{conditions.Season}|{conditions.DayOfMonth}|{conditions.DayOfWeek}|{conditions.Friendship}",
+          LogLevel.Info);
+        if (FirstPassDialogue(conditions, out dialogue)) return dialogue;
+        if (HeartDialogue(conditions, out dialogue)) return dialogue;
+        if (NullIfTruePass(conditions)) return null;
+        if (LastPassDialogue(conditions, out dialogue)) return dialogue;
       }
 
       //_logger.Log("Exiting GetDialogue", LogLevel.Info);
@@ -60,15 +62,16 @@ namespace DialogueExtension.Patches.Parsing
       return false;
     }
 
-    private bool LastPassDialogue(DialogueConditions conditions, out Dialogue dialogue)
+    private bool LastPassDialogue(DialogueConditions conditions, out IDialogueWrapper dialogue)
     {
-      // _logger.Log("Entering LastPassDialogue", LogLevel.Info);
-      //if (conditions.Npc.Name.Equals("Caroline") && _gameWrapper.isLocationAccessible("CommunityCenter") &&
-      //    (conditions.Season == Season.Summer && conditions.DayOfWeek == DayOfWeek.Mon))
-      //{
-      //  dialogue = new Dialogue(conditions.Npc.Dialogue["summer_Wed"], conditions.Npc);
-      //  return true;
-      //}
+      //// _logger.Log("Entering LastPassDialogue", LogLevel.Info);
+      if (conditions.Npc.Name.Equals("Caroline") && _gameWrapper.isLocationAccessible("CommunityCenter") &&
+          (conditions.Season == Season.Summer && conditions.DayOfWeek == DayOfWeek.Mon))
+      {
+        dialogue = _factory.CreateInstance<IDialogueWrapper>(
+          conditions.Npc.Dialogue["summer_wed"], conditions.Npc);
+        return true;
+      }
 
       if (CheckIfDialogueContainsKey(conditions.Npc,
         FluentDialogueBuilder.New(conditions).Season().DayOfWeek().Married().Build(_logger),
@@ -82,13 +85,13 @@ namespace DialogueExtension.Patches.Parsing
       return false;
     }
 
-    public bool CheckIfDialogueContainsKey(NPC npc, string key,
-      out Dialogue dialogue, Func<bool> extraConditions = null)
+    public bool CheckIfDialogueContainsKey(INPCWrapper npc, string key,
+      out IDialogueWrapper dialogue, Func<bool> extraConditions = null)
     {
       _logger.Log($"{key} | {(extraConditions?.Invoke() ?? true)}", LogLevel.Info);
       if (npc.Dialogue.ContainsKey(key) && (extraConditions?.Invoke() ?? true))
       {
-        dialogue = new Dialogue(npc.Dialogue[key], npc);
+        dialogue = _factory.CreateInstance<IDialogueWrapper>(npc.Dialogue[key], npc);
         return true;
       }
 
@@ -99,17 +102,17 @@ namespace DialogueExtension.Patches.Parsing
     private string MarriageAppend(string spouse) =>
       !string.IsNullOrEmpty(spouse) ? $"_inlaw_{spouse}" : string.Empty;
 
-    private DayOfWeek ParseDayOfWeek(ref NPC npc, string day)
+    private DayOfWeek ParseDayOfWeek(INPCWrapper npc, string day)
     {
-      //if (npc.Name == "Pierre" &&
-      //    (_gameWrapper.isLocationAccessible("CommunityCenter") ||
-      //     _gameWrapper.player.HasTownKey) && day == "Wed")
-      //  day = "Sat";
+      if (npc.Name == "Pierre" &&
+          (_gameWrapper.isLocationAccessible("CommunityCenter") ||
+           _gameWrapper.player.HasTownKey) && day == "Wed")
+        day = "Sat";
 
       return (DayOfWeek) Enum.Parse(typeof(DayOfWeek), day);
     }
 
-    private bool FirstPassDialogue(DialogueConditions conditions, out Dialogue dialogue)
+    private bool FirstPassDialogue(DialogueConditions conditions, out IDialogueWrapper dialogue)
     {
       foreach (var useYear in new[] {false, true})
         if (CheckIfDialogueContainsKey(conditions.Npc,
@@ -120,7 +123,7 @@ namespace DialogueExtension.Patches.Parsing
       return false;
     }
 
-    private bool HeartDialogue(DialogueConditions conditions, out Dialogue dialogue)
+    private bool HeartDialogue(DialogueConditions conditions, out IDialogueWrapper dialogue)
     {
       {
         for (var i = 14; i > 0; i--)
@@ -128,7 +131,7 @@ namespace DialogueExtension.Patches.Parsing
           if (_conditionRepository.HeartDialogueDictionary.ContainsKey((i, true)))
             foreach (var func in _conditionRepository.HeartDialogueDictionary[(i, true)])
             {
-              dialogue = func(conditions, i);
+              dialogue = _factory.CreateInstance<IDialogueWrapper>(func(conditions, i));
               if (dialogue != null) return true;
             }
 
