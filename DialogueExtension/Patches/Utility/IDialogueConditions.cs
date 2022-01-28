@@ -1,11 +1,10 @@
-﻿using SDV.Shared.Abstractions;
-using StardewValley;
+﻿using StardewValley;
 
 namespace DialogueExtension.Patches.Utility
 {
   public interface IDialogueConditions
   {
-    INPCWrapper Npc { get; }
+    NPC Npc { get; }
     NPC BaseNpc { get; }
     string Year { get; }
     int FirstOrSecondYear { get; }

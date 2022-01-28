@@ -1,16 +1,11 @@
 ﻿using System;
-using SDV.Shared.Abstractions;
 using StardewValley;
 
 namespace DialogueExtension.Patches.Utility
 {
   public struct DialogueConditions : IDialogueConditions
   {
-    public DialogueConditions(NPC npc, string year, Season season, int dayOfMonth,
-      DayOfWeek dayOfWeek, string inlaw, int friendship) : this(new NPCWrapper(npc), year,
-      season, dayOfMonth, dayOfWeek, inlaw, friendship) { }
-
-    public DialogueConditions(INPCWrapper npc, string year, Season season, int dayOfMonth, 
+    public DialogueConditions(NPC npc, string year, Season season, int dayOfMonth, 
       DayOfWeek dayOfWeek, string inlaw, int friendship)
     {
       Npc = npc;
@@ -31,8 +26,8 @@ namespace DialogueExtension.Patches.Utility
     private int _dayOfMonth;
     private int _friendship;
 
-    public INPCWrapper Npc { get; }
-    public NPC BaseNpc => (NPC)Npc.GetBaseType;
+    public NPC Npc { get; }
+    public NPC BaseNpc => Npc;
     public string Year
     {
       get => _year;

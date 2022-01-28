@@ -1,12 +1,12 @@
 ﻿using System;
-using SDV.Shared.Abstractions;
+using StardewValley;
 
 namespace DialogueExtension.Patches.Utility
 {
   // ReSharper disable once UnusedMember.Global
   public class VanillaDialogueParser : IDialogueParser
   {
-    private INPCWrapper _npc;
+    private NPC _npc;
 
     /*
     "<Season>_" +
@@ -18,7 +18,7 @@ namespace DialogueExtension.Patches.Utility
 
     private string _workingString;
 
-    public VanillaDialogueParser(ref INPCWrapper npc, string dialogueKey)
+    public VanillaDialogueParser(ref NPC npc, string dialogueKey)
     {
       _workingString = dialogueKey;
       _npc = npc;

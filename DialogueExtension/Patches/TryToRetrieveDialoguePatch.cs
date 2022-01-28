@@ -2,8 +2,6 @@
 using DialogueExtension.Patches.Utility;
 using HarmonyLib;
 using JetBrains.Annotations;
-using SDV.Shared.Abstractions;
-using SDV.Shared.Abstractions.Utility;
 using StardewModdingAPI;
 using StardewValley;
 // ReSharper disable InconsistentNaming
@@ -13,7 +11,7 @@ namespace DialogueExtension.Patches
 {
   public class TryToRetrieveDialoguePatch : HarmonyPatch
   {
-    public TryToRetrieveDialoguePatch(IMonitor monitor, IHarmonyWrapper wrapper, IDialogueLogic dialogueLogic, IWrapperFactory factory) : base(monitor, wrapper)
+    public TryToRetrieveDialoguePatch(IMonitor monitor, IHarmonyWrapper wrapper, IDialogueLogic dialogueLogic) : base(monitor, wrapper)
     {
       HarmonyWrapper.Patch(
        AccessTools.Method(typeof(NPC), "tryToRetrieveDialogue"),
@@ -21,21 +19,16 @@ namespace DialogueExtension.Patches
        new HarmonyMethod(typeof(TryToRetrieveDialoguePatch), "Postfix"));
 
       _dialogueLogic = dialogueLogic;
-      _wrapperFactory = factory;
     }
     
     protected override string PatchName => ".tryToRetrieveDialogue";
     private static IDialogueLogic _dialogueLogic;
-    private static IWrapperFactory _wrapperFactory;
 
     [UsedImplicitly]
     private static bool Prefix(ref NPC __instance, ref string preface, ref Dialogue __result)
     {
-      var npc = _wrapperFactory.CreateInstance<INPCWrapper>(__instance, Logger);
-
-      __result = _dialogueLogic.GetDialogue(ref npc, !string.IsNullOrEmpty(preface)).GetBaseType;
-      if (__result == null) Logger.Log("Value is null", LogLevel.Alert);
-      else Logger.Log(__result.getCurrentDialogue(), LogLevel.Alert);
+      var npc = __instance;
+      __result = _dialogueLogic.GetDialogue(ref npc, !string.IsNullOrEmpty(preface));
       return true;
     }
 
@@ -43,8 +36,8 @@ namespace DialogueExtension.Patches
     [UsedImplicitly]
     private static void Postfix(ref NPC __instance, ref Dialogue __result)
     {
-      if (__result == null) Logger.Log("Value is null", LogLevel.Alert);
-      else Logger.Log(__result.getCurrentDialogue(), LogLevel.Alert);
+      if (__result == null) Logger.Log("Value is null", LogLevel.Debug);
+      else Logger.Log(__result.getCurrentDialogue(), LogLevel.Debug);
     }
   }
 }

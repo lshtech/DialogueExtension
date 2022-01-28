@@ -31,7 +31,7 @@ namespace DialogueExtension.Patches.Utility
               .DayOfWeek().FirstOrSecondYear().Married().Build(null),
             out var dialogue)
             ? new Dialogue(conditions.Npc.Dialogue["Fall_Mon"], conditions.BaseNpc)
-            : dialogue.GetBaseType;
+            : dialogue;
 
         return null;
       });
