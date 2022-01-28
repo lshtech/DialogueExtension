@@ -32,7 +32,7 @@ namespace DialogueExtension.Patches.Utility
     private int _friendship;
 
     public INPCWrapper Npc { get; }
-    public NPC BaseNpc => Npc.GetBaseType;
+    public NPC BaseNpc => (NPC)Npc.GetBaseType;
     public string Year
     {
       get => _year;

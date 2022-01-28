@@ -1,4 +1,5 @@
 ﻿using LightInject;
+
 namespace SDV.Shared.Abstractions.Utility
 {
   public class WrapperCompositionRoot : ICompositionRoot
@@ -6,16 +7,16 @@ namespace SDV.Shared.Abstractions.Utility
     public void Compose(IServiceRegistry serviceRegistry)
     {
       serviceRegistry
-        .Register<IAnimatedSpriteWrapper>()
-        .Register<IAnimationFrameWrapper>()
-        .Register<ICharacterWrapper>()
-        .Register<IFarmerSpriteWrapper>()
-        .Register<IGameLocationWrapper>()
-        .Register<IGameWrapper>()
-        .Register<IHorseWrapper>()
-        .Register<IModDataDictionaryWrapper>()
-        .Register<INPCWrapper>()
-        .Register<IServiceFactory, IWrapperFactory>((factory, serviceFactory) => new WrapperFactory(serviceFactory));
+        .Register<IAnimatedSpriteWrapper, AnimatedSpriteWrapper>()
+        .Register<IAnimationFrameWrapper, AnimationFrameWrapper>()
+        .Register<ICharacterWrapper, CharacterWrapper>()
+        .Register<IFarmerSpriteWrapper, FarmerSpriteWrapper>()
+        .Register<IGameLocationWrapper, GameLocationWrapper>()
+        .Register<IGameWrapper, GameWrapper>()
+        .Register<IHorseWrapper, HorseWrapper>()
+        .Register<IModDataDictionaryWrapper, ModDataDictionaryWrapper>()
+        .Register<INPCWrapper, NPCWrapper>()
+        .Register<IWrapperFactory, WrapperFactory>();
     }
   }
 }

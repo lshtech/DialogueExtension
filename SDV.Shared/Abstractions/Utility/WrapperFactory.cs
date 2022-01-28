@@ -12,9 +12,12 @@ namespace SDV.Shared.Abstractions.Utility
       => (TInterface)_serviceFactory.GetInstance(typeof(TInterface), new []{item});
 
     public TInterface CreateInstance<TInterface>(params object[] args)
-    => (TInterface)_serviceFactory.GetInstance(typeof(TInterface), args);
+    {
+      return (TInterface) _serviceFactory.GetInstance(typeof(TInterface), args);
+    }
 
     [NotNull] private readonly IServiceFactory _serviceFactory;
     public WrapperFactory([NotNull] IServiceFactory factory) => _serviceFactory = factory;
+    //public WrapperFactory() => _serviceFactory = new ServiceContainer();
   }
 }

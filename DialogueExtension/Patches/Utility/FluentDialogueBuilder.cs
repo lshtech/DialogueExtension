@@ -37,7 +37,7 @@ namespace DialogueExtension.Patches.Utility
       $"{GetInlaw}";
 
     private string GetSeason =>
-      _setSeason ? _conditions.Season + "_" : string.Empty;
+      _setSeason ? _conditions.Season.ToString().ToLower() + "_" : string.Empty;
 
     private string GetDayOfWeek =>
       _setDayOfWeek ? _conditions.DayOfWeek.ToString() : string.Empty;
@@ -183,7 +183,7 @@ namespace DialogueExtension.Patches.Utility
 
     public string Build(IMonitor logger = null)
     {
-      logger?.Log(Dialogue, LogLevel.Warn);
+      //logger?.Log(Dialogue, LogLevel.Warn);
       return Dialogue;
     }
 

@@ -19,26 +19,40 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SDV.Shared\SDV.Shared.projitems*{1ed451f5-8003-4aea-bce6-d538b0108d3b}*SharedItemsImports = 5
-		SDV.Shared\SDV.Shared.projitems*{cda8795c-2490-4c42-90fb-9ab95fae1d26}*SharedItemsImports = 5
+		SDV.Shared\SDV.Shared.projitems*{5f263dd5-26cb-422b-a49c-3e99bf082907}*SharedItemsImports = 4
 		SDV.Shared\SDV.Shared.projitems*{dddc1645-0d3a-4044-8c7d-2b3d37834daa}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1ED451F5-8003-4AEA-BCE6-D538B0108D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1ED451F5-8003-4AEA-BCE6-D538B0108D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ED451F5-8003-4AEA-BCE6-D538B0108D3B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1ED451F5-8003-4AEA-BCE6-D538B0108D3B}.Debug|x86.Build.0 = Debug|Any CPU
 		{1ED451F5-8003-4AEA-BCE6-D538B0108D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ED451F5-8003-4AEA-BCE6-D538B0108D3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ED451F5-8003-4AEA-BCE6-D538B0108D3B}.Release|x86.ActiveCfg = Release|Any CPU
+		{1ED451F5-8003-4AEA-BCE6-D538B0108D3B}.Release|x86.Build.0 = Release|Any CPU
 		{5F263DD5-26CB-422B-A49C-3E99BF082907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F263DD5-26CB-422B-A49C-3E99BF082907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F263DD5-26CB-422B-A49C-3E99BF082907}.Debug|x86.ActiveCfg = Debug|x86
+		{5F263DD5-26CB-422B-A49C-3E99BF082907}.Debug|x86.Build.0 = Debug|x86
 		{5F263DD5-26CB-422B-A49C-3E99BF082907}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F263DD5-26CB-422B-A49C-3E99BF082907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F263DD5-26CB-422B-A49C-3E99BF082907}.Release|x86.ActiveCfg = Release|x86
+		{5F263DD5-26CB-422B-A49C-3E99BF082907}.Release|x86.Build.0 = Release|x86
 		{CDA8795C-2490-4C42-90FB-9AB95FAE1D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDA8795C-2490-4C42-90FB-9AB95FAE1D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA8795C-2490-4C42-90FB-9AB95FAE1D26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CDA8795C-2490-4C42-90FB-9AB95FAE1D26}.Debug|x86.Build.0 = Debug|Any CPU
 		{CDA8795C-2490-4C42-90FB-9AB95FAE1D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDA8795C-2490-4C42-90FB-9AB95FAE1D26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA8795C-2490-4C42-90FB-9AB95FAE1D26}.Release|x86.ActiveCfg = Release|Any CPU
+		{CDA8795C-2490-4C42-90FB-9AB95FAE1D26}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

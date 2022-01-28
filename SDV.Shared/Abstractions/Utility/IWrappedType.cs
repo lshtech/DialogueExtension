@@ -3,6 +3,6 @@
   public interface IWrappedType<T> where T : class
   {
     T GetBaseType { get; }
+    //void SetBaseType(T item);
   }
-
 }

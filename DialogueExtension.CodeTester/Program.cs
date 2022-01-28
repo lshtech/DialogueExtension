@@ -1,108 +1,113 @@
 ﻿using System;
+using JetBrains.Annotations;
 using LightInject;
+using StardewValley;
 
 namespace DialogueExtension.CodeTester
 {
-  class Program
+  internal static class Program
   {
-    static void Main(string[] args)
+    private static void Main()
     {
-      var c = CreateContainer();
-      var f = c.GetInstance<ITestFactory>();
-      //var t = f.CreateInstance<IWrappedTest, string>("test string");
-      var x = c.GetInstance(typeof(IWrappedTest), new[] {"porky pigb"});
-
-      //var ff = c.GetInstance<IFooFactory>();
-      //var f = ff.GetFoo(324);
-      //var x = f;
-
+      //var c = CreateContainer();
+      //var factory = c.GetInstance<IWrapperFactory>();
+      //var tc = factory.CreateInstance<ITestClass>(90);
+      
+      Console.WriteLine(typeof(Character).IsAssignableFrom(typeof(NPC)));
       Console.ReadLine();
     }
 
-    static ServiceContainer CreateContainer()
+    [NotNull]
+    private static ServiceContainer CreateContainer()
     {
       var container = new ServiceContainer();
-      container.Register<string, IWrappedTest>((factory, item) => new WrappedTest(item));
+      container.Register<ITestProperty, TestProperty>();
+      container.Register<ITestClass, TestClass>();
       container.Register<ITestFactory, TestFactory>();
-
-      container.Register<int, IFoo>((factory, i) => new Foo(i));
-      container.Register<IFooFactory, FooFactory>();
-
+      //container.RegisterInstance(container);
+      container.Register<IWrapperFactory, WrapperFactory>();
+      container.RegisterInstance<IServiceFactory>(container.BeginScope());
+      //container.Register<IServiceFactory, IWrapperFactory>();
       return container;
     }
   }
 
+  
+
+  public class WrapperFactory : IWrapperFactory
+  {
+    public TInterface CreateInstance<TInterface>()
+      => (TInterface)_serviceFactory.GetInstance(typeof(TInterface));
+
+    public TInterface CreateInstance<TInterface>(object item)
+      => (TInterface)_serviceFactory.GetInstance(typeof(TInterface), new[] { item });
+
+    public TInterface CreateInstance<TInterface>(params object[] args)
+      => (TInterface)_serviceFactory.GetInstance(typeof(TInterface), args);
+
+    private readonly IServiceFactory _serviceFactory;
+    public WrapperFactory(IServiceFactory factory) => _serviceFactory = factory;
+    public WrapperFactory() => _serviceFactory = new ServiceContainer();
+  }
+
+  public interface IWrapperFactory
+  {
+    TInterface CreateInstance<TInterface>();
+    TInterface CreateInstance<TInterface>(object item);
+    TInterface CreateInstance<TInterface>(params object[] args);
+  }
+
+
   public class TestFactory : ITestFactory
   {
-    public TWrapped CreateInstance<TWrapped, TBase>(TBase item)
-      where TBase : class
+    public ITestClass GetTestClass()
     {
-      var instance = Activator.CreateInstance(typeof(TWrapped), item);
-      return (TWrapped) instance;
+      return new TestClass(70);
     }
 
+    private Func<ITestClass> _createTestClass;
+
+    public TestFactory(Func<ITestClass> createTestClass)
+    {
+      _createTestClass = createTestClass;
+    }
   }
+
   public interface ITestFactory
   {
-    TWrapped CreateInstance<TWrapped, TBase>(TBase item)
-      where TBase : class;
-
-
-    //ITest<T> Get
+    ITestClass GetTestClass();
   }
-  public abstract class Test<T> : ITest<T> where T : class
+  
+  public class TestClass : ITestClass
   {
-    protected T Item;
-   // protected Test(T item) => _item = item;
-    public string WhatAmI => Item.GetType().ToString();
-  }
-  public interface ITest<T> where T : class
-  {
-    string WhatAmI { get; }
-  }
-
-  public class WrappedTest : Test<string>, IWrappedTest
-  {
-
-    public WrappedTest(string item) => Item = item;
-  }
-
-  public interface IWrappedTest
-  {
-
-  }
-
-
-
-
-  public class Foo : IFoo
-  {
-    public Foo(int value)
+    public ITestProperty TestProperty { get; set; }
+    public int Value { get; set; }
+    public TestClass() : this(54){}
+    public TestClass(int value)
     {
       Value = value;
     }
 
-    public int Value { get; private set; }
-
-  
+    public int GetValue() => 27;
   }
 
-  public interface IFooFactory
+  public interface ITestClass
   {
-    IFoo GetFoo(int value);
-  }
-  public class FooFactory : IFooFactory
-  {
-    private readonly Func<int, IFoo> _createFoo;
-
-    public FooFactory(Func<int, IFoo> createFoo) => _createFoo = createFoo;
-
-    public IFoo GetFoo(int value) => _createFoo(value);
+    ITestProperty TestProperty { get; set; }
+    int Value { get; set; }
   }
 
-  public interface IFoo
+  public class TestProperty : ITestProperty
   {
+    
+    public IServiceFactory Factory { get; set; } 
+    public int Value { get; set; } = 90;
+  }
 
+  public interface ITestProperty
+  {
+    int Value { get; set; }
+    IServiceFactory Factory { get; set; }
   }
  
 }

@@ -1,6 +1,6 @@
 ﻿using DialogueExtension.Patches.Parsing;
 using DialogueExtension.Patches.Utility;
-using Harmony;
+using HarmonyLib;
 using JetBrains.Annotations;
 using SDV.Shared.Abstractions;
 using SDV.Shared.Abstractions.Utility;
@@ -31,7 +31,7 @@ namespace DialogueExtension.Patches
     [UsedImplicitly]
     private static bool Prefix(ref NPC __instance, ref string preface, ref Dialogue __result)
     {
-      var npc = _wrapperFactory.CreateInstance<INPCWrapper>(__instance);
+      var npc = _wrapperFactory.CreateInstance<INPCWrapper>(__instance, Logger);
 
       __result = _dialogueLogic.GetDialogue(ref npc, !string.IsNullOrEmpty(preface)).GetBaseType;
       if (__result == null) Logger.Log("Value is null", LogLevel.Alert);

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using DialogueExtension.Patches.Utility;
 using SDV.Shared.Abstractions;
 using SDV.Shared.Abstractions.Utility;
 using StardewModdingAPI;
+using StardewValley;
 using DayOfWeek = DialogueExtension.Patches.Utility.DayOfWeek;
 
 namespace DialogueExtension.Patches.Parsing
@@ -24,10 +26,15 @@ namespace DialogueExtension.Patches.Parsing
 
     public IDialogueWrapper GetDialogue(ref INPCWrapper npc, bool useSeason)
     {
-      _logger.Log("Entering GetDialogue", LogLevel.Info);
-      foreach (var isMarried in new[] { true, false })
+      var checkInlaw = new List<bool>() {false};
+      if (_gameWrapper.player.spouse != string.Empty)
+        checkInlaw.Insert(0, true);
+      foreach (var isMarried in checkInlaw)
       {
-        if (!Enum.TryParse<Season>(_gameWrapper.currentSeason, true, out Season season)) continue;
+        var season = Season.Unknown;
+        if (!string.IsNullOrEmpty(_gameWrapper.currentSeason))
+          if (!Enum.TryParse<Season>(_gameWrapper.currentSeason, true, out season)) continue;
+
         var conditions = new DialogueConditions(
           npc,
           _gameWrapper.year.ToString("00"),
@@ -40,22 +47,17 @@ namespace DialogueExtension.Patches.Parsing
             : 0);
 
         IDialogueWrapper dialogue;
-        _logger.Log(
-          $"{conditions.Npc.Name} | {conditions.Year}|{conditions.Season}|{conditions.DayOfMonth}|{conditions.DayOfWeek}|{conditions.Friendship}",
-          LogLevel.Info);
         if (FirstPassDialogue(conditions, out dialogue)) return dialogue;
         if (HeartDialogue(conditions, out dialogue)) return dialogue;
-        if (NullIfTruePass(conditions)) return null;
+        if (NullIfTruePass(conditions)) continue;
         if (LastPassDialogue(conditions, out dialogue)) return dialogue;
       }
 
-      //_logger.Log("Exiting GetDialogue", LogLevel.Info);
       return null;
     }
 
     private bool NullIfTruePass(DialogueConditions conditions)
     {
-      //_logger.Log("Entering NullIfTruePass", LogLevel.Info);
       if (!conditions.Npc.Dialogue.ContainsKey(FluentDialogueBuilder
         .New(conditions).Season().DayOfWeek().Married().Build(_logger))) return true;
 
@@ -64,21 +66,20 @@ namespace DialogueExtension.Patches.Parsing
 
     private bool LastPassDialogue(DialogueConditions conditions, out IDialogueWrapper dialogue)
     {
-      //// _logger.Log("Entering LastPassDialogue", LogLevel.Info);
       if (conditions.Npc.Name.Equals("Caroline") && _gameWrapper.isLocationAccessible("CommunityCenter") &&
           (conditions.Season == Season.Summer && conditions.DayOfWeek == DayOfWeek.Mon))
       {
         dialogue = _factory.CreateInstance<IDialogueWrapper>(
-          conditions.Npc.Dialogue["summer_wed"], conditions.Npc);
+          conditions.Npc.Dialogue["summer_Wed"], conditions.Npc);
         return true;
       }
 
       if (CheckIfDialogueContainsKey(conditions.Npc,
-        FluentDialogueBuilder.New(conditions).Season().DayOfWeek().Married().Build(_logger),
+        FluentDialogueBuilder.New(conditions).Season().DayOfWeek().FirstOrSecondYear().Married().Build(_logger),
         out dialogue)) return true;
 
       if (CheckIfDialogueContainsKey(conditions.Npc,
-        FluentDialogueBuilder.New(conditions).Season().DayOfWeek().FirstOrSecondYear().Married().Build(_logger),
+        FluentDialogueBuilder.New(conditions).Season().DayOfWeek().Married().Build(_logger),
         out dialogue)) return true;
 
       dialogue = null;
@@ -88,7 +89,6 @@ namespace DialogueExtension.Patches.Parsing
     public bool CheckIfDialogueContainsKey(INPCWrapper npc, string key,
       out IDialogueWrapper dialogue, Func<bool> extraConditions = null)
     {
-      _logger.Log($"{key} | {(extraConditions?.Invoke() ?? true)}", LogLevel.Info);
       if (npc.Dialogue.ContainsKey(key) && (extraConditions?.Invoke() ?? true))
       {
         dialogue = _factory.CreateInstance<IDialogueWrapper>(npc.Dialogue[key], npc);
@@ -114,9 +114,11 @@ namespace DialogueExtension.Patches.Parsing
 
     private bool FirstPassDialogue(DialogueConditions conditions, out IDialogueWrapper dialogue)
     {
+      if (conditions.Season == Season.Spring && conditions.DayOfMonth ==12)
+        Console.Write(string.Empty);
       foreach (var useYear in new[] {false, true})
         if (CheckIfDialogueContainsKey(conditions.Npc,
-          FluentDialogueBuilder.New(conditions).Season().DayOfWeek().Married().Year(useYear).Build(_logger),
+          FluentDialogueBuilder.New(conditions).Season().DayOfMonth().Married().FirstOrSecondYear(useYear).Build(_logger),
           out dialogue, () => conditions.FirstOrSecondYear == 1))
           return true;
       dialogue = null;
@@ -136,7 +138,10 @@ namespace DialogueExtension.Patches.Parsing
             }
 
           if (conditions.Hearts >= i && CheckIfDialogueContainsKey(conditions.Npc,
-            FluentDialogueBuilder.New(conditions).Season().DayOfMonth().Hearts(i).Married().Build(_logger),
+            FluentDialogueBuilder.New(conditions).Season().DayOfWeek().Hearts(i).FirstOrSecondYear().Married().Build(_logger),
+            out dialogue)) return true;
+          if (conditions.Hearts >= i && CheckIfDialogueContainsKey(conditions.Npc,
+            FluentDialogueBuilder.New(conditions).Season().DayOfWeek().Hearts(i).Married().Build(_logger),
             out dialogue)) return true;
         }
 
