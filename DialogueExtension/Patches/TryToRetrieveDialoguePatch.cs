@@ -11,12 +11,13 @@ namespace DialogueExtension.Patches
 {
   public class TryToRetrieveDialoguePatch : HarmonyPatch
   {
+    private static IMonitor _monitor;
     public TryToRetrieveDialoguePatch(IMonitor monitor, IHarmonyWrapper wrapper, IDialogueLogic dialogueLogic) : base(monitor, wrapper)
     {
+      _monitor = monitor;
       HarmonyWrapper.Patch(
        AccessTools.Method(typeof(NPC), "tryToRetrieveDialogue"),
-       new HarmonyMethod(typeof(TryToRetrieveDialoguePatch), "Prefix"),
-       new HarmonyMethod(typeof(TryToRetrieveDialoguePatch), "Postfix"));
+       prefix: new HarmonyMethod(typeof(TryToRetrieveDialoguePatch), "Prefix"));
 
       _dialogueLogic = dialogueLogic;
     }
@@ -29,15 +30,8 @@ namespace DialogueExtension.Patches
     {
       var npc = __instance;
       __result = _dialogueLogic.GetDialogue(ref npc, !string.IsNullOrEmpty(preface));
-      return true;
-    }
-
-
-    [UsedImplicitly]
-    private static void Postfix(ref NPC __instance, ref Dialogue __result)
-    {
-      if (__result == null) Logger.Log("Value is null", LogLevel.Debug);
-      else Logger.Log(__result.getCurrentDialogue(), LogLevel.Debug);
+      if (__result != null) _monitor.Log($"{npc.Name} | {__result.getCurrentDialogue()}", LogLevel.Trace);
+      return false;
     }
   }
 }

@@ -27,7 +27,7 @@ namespace DialogueExtension.Patches.Parsing
       {
         var season = Season.Unknown;
         if (!string.IsNullOrEmpty(Game1.currentSeason))
-          if (!Enum.TryParse<Season>(Game1.currentSeason, true, out season)) continue;
+          if (!Enum.TryParse(Game1.currentSeason, true, out season)) continue;
 
         var conditions = new DialogueConditions(
           npc,
@@ -41,6 +41,7 @@ namespace DialogueExtension.Patches.Parsing
             : 0);
 
         Dialogue dialogue;
+
         if (FirstPassDialogue(conditions, out dialogue)) return dialogue;
         if (HeartDialogue(conditions, out dialogue)) return dialogue;
         if (NullIfTruePass(conditions)) continue;
@@ -88,7 +89,6 @@ namespace DialogueExtension.Patches.Parsing
         dialogue = new Dialogue(npc.Dialogue[key], npc);
         return true;
       }
-
       dialogue = null;
       return false;
     }
@@ -124,13 +124,16 @@ namespace DialogueExtension.Patches.Parsing
       {
         for (var i = 14; i > 0; i--)
         {
+          if (i > conditions.Hearts)
+            continue;
           if (_conditionRepository.HeartDialogueDictionary.ContainsKey((i, true)))
+            
             foreach (var func in _conditionRepository.HeartDialogueDictionary[(i, true)])
             {
               dialogue = func(conditions, i);
               if (dialogue != null) return true;
             }
-
+          
           if (conditions.Hearts >= i && CheckIfDialogueContainsKey(conditions.Npc,
             FluentDialogueBuilder.New(conditions).Season().DayOfWeek().Hearts(i).FirstOrSecondYear().Married().Build(_logger),
             out dialogue)) return true;
@@ -138,7 +141,7 @@ namespace DialogueExtension.Patches.Parsing
             FluentDialogueBuilder.New(conditions).Season().DayOfWeek().Hearts(i).Married().Build(_logger),
             out dialogue)) return true;
         }
-
+        
         dialogue = null;
         return false;
       }

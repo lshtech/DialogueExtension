@@ -6,7 +6,7 @@
     <EnableModDeploy>true</EnableModDeploy>
     <GameModsPath>$(GamePath)\Mods</GameModsPath>
     <IgnoreModFilePatterns>JetBrains.Annotations.dll</IgnoreModFilePatterns>
-	<BundleExtraAssemblies>All</BundleExtraAssemblies>
+	<BundleExtraAssemblies>ThirdParty</BundleExtraAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
