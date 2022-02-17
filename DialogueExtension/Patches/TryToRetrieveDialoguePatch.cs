@@ -1,4 +1,5 @@
-﻿using DialogueExtension.Patches.Parsing;
+﻿using System;
+using DialogueExtension.Patches.Parsing;
 using DialogueExtension.Patches.Utility;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -28,10 +29,25 @@ namespace DialogueExtension.Patches
     [UsedImplicitly]
     private static bool Prefix(ref NPC __instance, ref string preface, ref Dialogue __result)
     {
+      if (Game1.dayOfMonth is < 1 or > 28)
+        return true;
+
       var npc = __instance;
-      __result = _dialogueLogic.GetDialogue(ref npc, !string.IsNullOrEmpty(preface));
-      if (__result != null) _monitor.Log($"{npc.Name} | {__result.getCurrentDialogue()}", LogLevel.Trace);
-      return false;
+      try
+      {
+        __result = _dialogueLogic.GetDialogue(ref npc, !string.IsNullOrEmpty(preface));
+        if (__result != null) _monitor.Log($"{npc.Name} | {__result.getCurrentDialogue()}");
+        return false;
+      }
+      catch (Exception ex)
+      {
+        _monitor.Log(ex.Message);
+        var friendship = Game1.player.friendshipData.TryGetValue(npc.Name, out var friendshipValue) ? friendshipValue.Points : 0;
+        var spouse = string.IsNullOrEmpty(Game1.player.spouse) ? Game1.player.spouse : "none";
+        _monitor.Log($"{npc.Name} | Year:{Game1.year} | Season:{Game1.currentSeason} | " +
+                     $"Day:{Game1.dayOfMonth} | Friendship:{friendship} | Spouse:{spouse}");
+        return true;
+      }
     }
   }
 }
